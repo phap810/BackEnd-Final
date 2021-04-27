@@ -1,0 +1,42 @@
+ // max-lines 
+@mixin max-lines($lines) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  line-height: 1.2;
+}
+
+// spacing
+@function name-slice($key, $value) {
+  @return str-slice($key, 0, 1)+str-slice($value, 0, 1);
+}
+
+@mixin spacing-class-map() {
+  $l: left;
+  $r: right;
+  $t: top;
+  $b: bottom;
+  $pad: padding;
+  $mar: margin;
+
+  $spacing-slugs: $pad $l, $pad $r, $pad $t, $pad $b, $mar $l, $mar $r, $mar $t, $mar $b;
+
+  @each $slug in $spacing-slugs {
+    $key: nth($slug, 1);
+    $value: nth($slug, 2);
+    @for $i from 1 through 3 {
+      .#{name-slice($key, $value)}-#{$i*5} {
+        #{$key}-#{$value}: $i*5*1px;
+      } 
+    }
+  }
+
+  .m-0 {
+    #{$mar}: 0;
+  }
+  .p-0 {
+    #{$pad}: 0;
+  }
+}

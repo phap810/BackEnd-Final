@@ -1,0 +1,39 @@
+{
+  "layout": {
+    "header": {
+      "language": "English"
+    }
+  },
+  "menu": {
+    "products": "商品管理",
+    "list": "商品列表",
+    "import": "商品管理",
+    "export": "商品匯出",
+    "createManually": "商品建立",
+    "exportLog": "匯出紀錄",
+    "katool": "詞庫管理",
+    "kkdictionary": "字庫表",
+    "kkglossary": "詞庫表",
+    "case": "案件管理",
+    "caseList": "案件列表",
+    "caseAssignment": "新增案件",
+    "summary": "報表查詢",
+    "systemSetting": "系統設定",
+    "accountSetting": "帳號管理",
+    "apiSetting": "翻譯工具設定",
+    "myAccount": "個人資訊",
+    "prototype": "Prototype",
+    "button": "Button",
+    "table": "Table"
+  },
+  "login": {
+    "title": "Login",
+    "error": "wrong user's email or password",
+    "holderEmail": "Email",
+    "holderPassword": "Password",
+    "validateEmail": "Please input your email",
+    "validatePassword": "Please input your password",
+    "buttonLogin": "Login",
+    "remember": "Remember me"
+  }
+}

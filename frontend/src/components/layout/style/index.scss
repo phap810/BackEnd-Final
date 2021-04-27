@@ -1,0 +1,84 @@
+@import './veriable.scss';
+@import './utils.scss';
+
+#screen {
+  > .ant-layout {
+    min-height: 100vh;
+  }
+
+  #header {
+    background: #fff;
+    padding: 0;
+
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color .3s;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+
+  #content {
+    margin: 20px 15px;
+    padding: 24px;
+    background: #fff;
+    min-height: 280px;
+  }
+
+  .logo {
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__title{
+      color: #fff;
+      margin: 0;
+      font-size: 1.2em;
+      a {
+        text-decoration: none;
+        color: #fff;
+      }
+    }
+  }
+
+  .ant-breadcrumb {
+    padding: 16px 24px 0;
+    font-size: 14px;
+
+    &__current {
+      height: 15px;
+    }
+  }
+
+  .form-search {
+    .ant-form {
+      .ant-form-item {
+        display: flex;
+        .ant-form-item-label {
+          flex: 1;
+          min-width: 120px;
+        }
+        .ant-form-item-control-wrapper {
+          flex: 3;
+        }
+      }
+    }
+  }
+
+  .customTable {
+    .customRow {
+      &:hover {
+        > td {
+          background: transparent;
+        }
+      }
+    }
+  }
+  
+}

@@ -1,0 +1,39 @@
+{
+  "layout": {
+    "header": {
+      "language": "中 文"
+    }
+  },
+  "menu": {
+    "products": "Products",
+    "list": "List",
+    "import": "Import",
+    "export": "Export",
+    "createManually": "Create Manually",
+    "exportLog": "Export Log",
+    "katool": "KATOOL",
+    "kkdictionary": "KK Dictionary",
+    "kkglossary": "KK Glossary",
+    "case": "Case",
+    "caseList": "Case List",
+    "caseAssignment": "Case Assignment",
+    "summary": "Summary",
+    "systemSetting": "System Setting",
+    "accountSetting": "Account Setting",
+    "apiSetting": "API Setting",
+    "myAccount": "My Account",
+    "prototype": "Prototype",
+    "button": "Button",
+    "table": "Table"
+  },
+  "login": {
+    "title": "Login",
+    "error": "wrong user's email or password",
+    "holderEmail": "Email",
+    "holderPassword": "Password",
+    "validateEmail": "Please input your email",
+    "validatePassword": "Please input your password",
+    "buttonLogin": "Login",
+    "remember": "Remember me"
+  }
+}

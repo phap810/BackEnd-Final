@@ -1,0 +1,11 @@
+@import './mixin.scss';
+
+@include spacing-class-map();
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
