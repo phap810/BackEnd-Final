@@ -14,6 +14,10 @@ const store = new Vuex.Store({
             token: localStorage.getItem('token') || '',
             username: {},
             auth:[],
+            //customer
+            login:[],
+            customer:[],
+            customer_id: localStorage.getItem('id') || '',
             // admin: "",
             // superuser: "",
         },
@@ -47,6 +51,31 @@ const store = new Vuex.Store({
                         .catch(err => {
                             commit('auth_error')
                             localStorage.removeItem('auth')
+                            reject(err)
+                        })
+                })
+            },
+            logincustomer({ commit }, login) {
+                return new Promise((resolve, reject) => {
+                    // commit('auth_request')
+                    axios({ url: 'http://127.0.0.1:8000/api/login-customer', data: login, method: 'POST' })
+                        .then(resp => {
+                            console.log(resp.data.code)
+                            if (resp.data.code == "500") {
+                                alert("Tài khoản hoặc mật khẩu không đúng!");
+                            } else {
+                                alert("Đăng nhập thành công")
+                                resp.data.data.map((resItem) => {
+                                    console.log(resItem);
+                                    localStorage.setItem('customer', JSON.stringify(resItem));
+                                    axios.defaults.headers =resItem.customer_id
+                                })
+                            }
+                            resolve(resp)
+                        })
+                        .catch(err => {
+                            // commit('auth_error')
+                            localStorage.removeItem('customer')
                             reject(err)
                         })
                 })

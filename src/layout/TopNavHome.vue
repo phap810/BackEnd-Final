@@ -11,6 +11,7 @@
           <router-link class="item-menu" to='/viewcart'>Cart (<span class="total-count"></span>)
           <b-icon icon="cart4" aria-hidden="true" class="iccart"></b-icon>
           </router-link>
+          <router-link class="item-menu" to='/logincustomer'>Login</router-link>
           <!-- <b-button class="cart-bt" to="/viewcart" data-toggle="modal" data-target="#cart">
           Cart (<span class="total-count"></span>)
           <b-icon icon="cart4" aria-hidden="true" class="iccart"></b-icon>

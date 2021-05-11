@@ -9,9 +9,10 @@ import Contact from 'src/pages/Contact.vue'
 import About from 'src/pages/About.vue'
 import ViewCart from 'src/pages/ViewCart.vue'
 
+//CUSTOMER
+import Register from 'src/pages/Register'
+import Logincustomer from 'src/pages/Logincustomer.vue'
 
-import Register from 'src/customer/Register'
-import Logincustomer from 'src/customer/Logincustomer.vue'
 import Registration from 'src/client/Registration.vue'
 
 // Admin pages
@@ -51,12 +52,12 @@ const routes = [{
         component: Shop
     },
     {
-        path: '/1',
+        path: '/registercustomer',
         name: 'register',
         component: Register
     },
     {
-        path: '/2',
+        path: '/logincustomer',
         name: 'logincustomer',
         component: Logincustomer
     },

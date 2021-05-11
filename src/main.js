@@ -44,12 +44,12 @@ const router = new VueRouter({
     }
   }
 })
-let token = JSON.parse(window.localStorage.getItem('auth'))
+// let token = JSON.parse(window.localStorage.getItem('auth'))
 
 
-if( token ){
-  axios.defaults.headers.common['Authorization'] = 'Bearer '+token.token
-}
+// if( token ){
+//   axios.defaults.headers.common['Authorization'] = 'Bearer '+token.token
+// }
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

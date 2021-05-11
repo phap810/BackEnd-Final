@@ -7,14 +7,14 @@
             <h2>Sign In</h2>
             <form class="form-group" @submit.prevent="login">
               <input
-                v-model="loginForm.email"
+                v-model="email"
                 type="email"
                 class="form-control"
                 placeholder="Email"
                 required
               />
               <input
-                v-model="loginForm.password"
+                v-model="password"
                 type="password"
                 class="form-control"
                 placeholder="Password"
@@ -23,8 +23,8 @@
               <input type="submit" class="btn btn-primary" @click="doLogin" />
               <p>
                 Don't have an account?
-                <router-link class="item-menu" to="/1"
-                  >Sign in here</router-link
+                <router-link class="item-menu" to="/registercustomer"
+                  >Registry in here</router-link
                 >
               </p>
             </form>
@@ -48,42 +48,57 @@ export default {
   },
   data() {
     return {
-      loginForm: { email: "", password: "" },
+       email: "", 
+       password: "" ,
     };
   },
   methods: {
-    callAPILogin(form) {
-      return this.axios.post(`http://127.0.0.1:8000/api/login-customer`, form);
-    },
-    login() {
-      const { email, password } = this.loginForm;
+    // callAPILogin(form) {
+    //   return this.axios.post(`http://127.0.0.1:8000/api/login-customer`, form);
+    // },
+    // login() {
+    //   const { email, password } = this.loginForm;
 
-      if (!email) {
-        swal.fire("Vui long nhap email", null, "warning");
-      }
+    //   if (!email) {
+    //     swal.fire("Vui long nhap email", null, "warning");
+    //   }
 
-      if (!password) {
-        swal.fire("Vui long nhap mat khau", null, "warning");
-      }
+    //   if (!password) {
+    //     swal.fire("Vui long nhap mat khau", null, "warning");
+    //   }
 
-      this.callAPILogin({ email, password })
-        .then(() =>
-          swal.fire(
-            "Thanh cong",
-            "Dang nhap thanh cong, ban se duoc chuyen ve trang chu",
-            "success"
-          )
+    //   this.callAPILogin({ email, password })
+    //     .then(() =>
+    //       swal.fire(
+    //         "Thanh cong",
+    //         "Dang nhap thanh cong, ban se duoc chuyen ve trang chu",
+    //         "success"
+    //       )
+    //     )
+    //     .then(() => this.$router.push("/"))
+    //     .then(() => this.$router.go())
+    //     .catch((e) => {
+    //       console.log("EEE", e);
+    //       swal.fire(
+    //         "That bai",
+    //         "Dang nhap that bai. Vui long thu lai",
+    //         "error"
+    //       );
+    //     });
+    // },
+    //},
+        login(event) {
+      event.preventDefault()  
+      let email = this.email;
+      let password = this.password;
+      this.$store
+        .dispatch("logincustomer", { email, password })
+        .then(() => this.$router.push("/")
         )
-        .then(() => this.$router.push("/home"))
-        .catch((e) => {
-          console.log("EEE", e);
-          swal.fire(
-            "That bai",
-            "Dang nhap that bai. Vui long thu lai",
-            "error"
-          );
-        });
-    },
+        .then(() => this.$router.go())
+        // .catch((err) => console.log(err));
+    
+      },
   },
 };
 </script>

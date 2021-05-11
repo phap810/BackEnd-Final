@@ -137,7 +137,7 @@ export default {
         .then((res) => {
           console.log("Thành công");
           Swal.fire("Đã thêm!", "Dang ky thanh cong!.", "success").then(() =>
-            this.$router.push("/2")
+            this.$router.push("/logincustomer")
           );
         })
         .catch((error) => {
