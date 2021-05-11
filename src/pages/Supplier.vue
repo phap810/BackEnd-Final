@@ -146,6 +146,7 @@
                   <div v-else>
                     <div class="importpr">{{ formatPrice(im_price) }}.Đ</div>
                   </div>
+                  <b-input v-model="product_id"></b-input>
                   <div class="choose">
                     <b-form-group label="Chọn màu">
                     <b-form-select class="color" v-model="color">
@@ -247,14 +248,13 @@ export default {
   methods: {
         addItemToCart() {
       let formData = new FormData();
-      formData.append("id", "239");
+      formData.append("id", this.product_id);
       formData.append("size_id", this.size);
       formData.append("color_id", this.color);
       formData.append("quantity", this.quantity);
       const config = {
         headers: { "Content-type": "multipart/form-data" }
       };
-      console.log("NEw product", formData);
       axios
         .post(`http://127.0.0.1:8000/api/add-cart`, formData, config)
         .then(res => {
@@ -270,38 +270,38 @@ export default {
     },
     getDetail(id) {
       var self = this;
-      console.log("http://127.0.0.1:8000/api/product/", id);
       Vue.axios
         .get("http://127.0.0.1:8000/api/product/" + id)
         .then(function(resp) {
+          self.product_id = resp.data.data.id;
           self.name = resp.data.data.name;
           self.ex_price = resp.data.data.export_price;
           self.im_price = resp.data.data.import_price;
           self.img = resp.data.data.img;
           self.sale = resp.data.data.sale;
           self.note = resp.data.data.note;
-          console.log("Data:", resp.data.data);
         })
         .catch(function(error) {
           console.log("Loi:", error);
         });
     },
     getColor() {
+      console.log("id sp",this.product_id);
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-color/239")
+        .get("http://127.0.0.1:8000/api/product-color/230")
         .then(resp => {
-          console.log(resp.data);
+          console.log("color",resp.data);
           this.listColor = resp.data;
         })
         .catch(function(error) {
           console.log("Loi:", error);
         });
     },
-        getSize() {
+    getSize() {
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-size/239/139")
+        .get("http://127.0.0.1:8000/api/product-size/230/140")
         .then(resp => {
-          console.log(resp.data);
+          console.log("size",resp.data);
           this.listSize = resp.data;
         })
         .catch(function(error) {

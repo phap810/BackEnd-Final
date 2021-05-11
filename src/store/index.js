@@ -4,22 +4,14 @@ import axios from 'axios'
 Vue.use(Vuex)
 const store = new Vuex.Store({
         state: {
-            // orderFood: [{
-            //     id: null,
-            //     count: 0,
-            //     name: ''
-            // }],
-            // foodItems: [],
+            //admin
             status: '',
             token: localStorage.getItem('token') || '',
             username: {},
-            auth:[],
             //customer
             login:[],
             customer:[],
             customer_id: localStorage.getItem('id') || '',
-            // admin: "",
-            // superuser: "",
         },
         getters: {
             isLoggedIn: state => !!state.token,
@@ -31,24 +23,22 @@ const store = new Vuex.Store({
                     commit('auth_request')
                     axios({ url: 'http://127.0.0.1:8000/api/login', data: username, method: 'POST' })
                         .then(resp => {
-                            console.log(resp.data.code)
-                            if (resp.data.code == "100") {
-                                alert("Tài khoản hoặc mật khẩu không đúng!");
+                            if (resp.data.code == 500) {
+                                alert(resp.data.message);
                             } else {
                                 alert("Đăng nhập thành công")
-                                console.log(resp.data.error)
-                                console.log(resp.data.data, "dATA");
                                 resp.data.data.map((resItem) => {
                                     console.log(resItem);
                                     localStorage.setItem('auth', JSON.stringify(resItem));
                                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + resItem.token
                                 })
                             }
-                            console.log(resp.data.token, "TOKEN");
+                            console.log(resp.data.data[0].token, "TOKEN");
                             commit('auth_success', resp.data.data[0].token, username)
                             resolve(resp)
                         })
                         .catch(err => {
+                            alert("Tài khoản hoặc mật khẩu không đúng!");
                             commit('auth_error')
                             localStorage.removeItem('auth')
                             reject(err)
@@ -60,15 +50,13 @@ const store = new Vuex.Store({
                     // commit('auth_request')
                     axios({ url: 'http://127.0.0.1:8000/api/login-customer', data: login, method: 'POST' })
                         .then(resp => {
-                            console.log(resp.data.code)
                             if (resp.data.code == "500") {
                                 alert("Tài khoản hoặc mật khẩu không đúng!");
                             } else {
                                 alert("Đăng nhập thành công")
                                 resp.data.data.map((resItem) => {
-                                    console.log(resItem);
                                     localStorage.setItem('customer', JSON.stringify(resItem));
-                                    axios.defaults.headers =resItem.customer_id
+                                    axios.defaults.headers.common.Authorization ="Authorization: customer_id="+resItem.id;
                                 })
                             }
                             resolve(resp)
@@ -101,17 +89,18 @@ const store = new Vuex.Store({
             logout({ commit }) {
                 return new Promise((resolve, reject) => {
                     commit('logout')
-                    this.auth = {};
-                    this.saveCats();
-                    //localStorage.removeItem('auth')
-                    //delete axios.defaults.headers.common['Authorization']
-                    //resolve()
+                    localStorage.removeItem('auth')
+                    delete axios.defaults.headers.common['Authorization']
+                    resolve()
                 })
             },
-              saveCats() {
-                const parsed = JSON.stringify(this.auth);
-                localStorage.setItem("auth", parsed);
-              },
+            logoutcustomer({ commit }) {
+                return new Promise((resolve, reject) => {
+                    commit('logoutcustomer')
+                    localStorage.removeItem('customer')
+                    resolve()
+                })
+            },
         },
         mutations: {
             setFoodItemsById(state, items) {

@@ -93,11 +93,8 @@ export default {
       let password = this.password;
       this.$store
         .dispatch("logincustomer", { email, password })
-        .then(() => this.$router.push("/")
-        )
+        .then(() => this.$router.push("/"))
         .then(() => this.$router.go())
-        // .catch((err) => console.log(err));
-    
       },
   },
 };

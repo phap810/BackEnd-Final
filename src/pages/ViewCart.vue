@@ -20,15 +20,16 @@
           </slot>
         </thead>
         <tbody>
-          <tr v-for="(cat, n) in cats" v-bind:key="n.product_id">
-            <td>{{ cat.product_id }}</td>
+          <tr v-for="(cat, n) in items" v-bind:key="n.product_id">
+            <td>{{ cat.name }}</td>
+            <td>{{ cat.price }}</td>
+            <td>{{ cat.img }}</td>
             <td>{{ cat.size }}</td>
             <td>{{ cat.color }}</td>
             <td>{{ cat.quantity }}</td>
+            <td>{{ cat.total }}</td>
             <td>
-              <b-button variant="danger" size="sm" @click="removeCat(n)"
-                >Remove</b-button
-              >
+              <b-button variant="danger" size="sm">Remove</b-button>
             </td>
           </tr>
         </tbody>
@@ -197,17 +198,17 @@ export default {
       //     label: "Actions"
       //   }
       // ],
-      // items: [
-      //   {
-      //     name: "Huy",
-      //     price: "120 vnd",
-      //     img: "23",
-      //     size: "39",
-      //     color: "đen",
-      //     quantity: "2",
-      //     total: "240 vnd"
-      //   }
-      // ],
+      items: [
+        {
+          name: "Huy",
+          price: "120 vnd",
+          img: "23",
+          size: "39",
+          color: "đen",
+          quantity: "2",
+          total: "240 vnd"
+        }
+      ],
       // info: [
       //   {
       //     key: "name",
@@ -234,6 +235,7 @@ export default {
       //     label: ""
       //   }
       // ],
+      customer:[],
       bill: [
         {
           name: "Adidas",
@@ -255,15 +257,7 @@ export default {
   created() {
     this.getDetail();
   },
-  mounted() {
-    if (localStorage.getItem("cats")) {
-      try {
-        this.cats = JSON.parse(localStorage.getItem("cats"));
-      } catch (e) {
-        localStorage.removeItem("cats");
-      }
-    }
-  },
+  mounted() {},
   computed: {
     today: function() {
       var weekday = [
@@ -297,46 +291,15 @@ export default {
     }
   },
   methods: {
-    removeCat(x) {
-      this.cats.splice(x, 1);
-      this.saveCats();
-    },
-    clearAll() {
-      this.cats = {};
-      this.saveCats();
-    },
-    saveCats() {
-      const parsed = JSON.stringify(this.cats);
-      localStorage.setItem("cats", parsed);
-    },
-    // getItem() {
-    //   axios
-    //     .get(`http://127.0.0.1:8000/api/view-cart`)
-    //     .then(resp => {
-    //       console.log(resp.data);
-    //     })
-    //     // .then(res => {
-    //     //   this.items = res.data.map(product => {
-    //     //     return {
-    //     //       name: product.items.name,
-    //     //       price: product.price,
-    //     //       img: product.img,
-    //     //       size: product.size,
-    //     //       color: product.color,
-    //     //       quantity: product.quantity,
-    //     //       total: product.total,
-    //     //     };
-    //     //   });
-    //     // })
-    //     .catch(function(error) {
-    //       console.log("Loi:", error);
-    //     });
-    // },
     getDetail() {
-      var self = this;
-      self.cats.product_id = id;
-      console.log("http://127.0.0.1:8000/api/product/", id);
-     axios.get("http://127.0.0.1:8000/api/product/" + id).then(function(resp) {
+      this.customer=JSON.parse(localStorage.getItem('customer'));
+          console.log("local:",this.customer.id);
+      axios
+        .get("http://127.0.0.1:8000/api/view-cart")
+        .then(function(resp) {
+      this.customer=JSON.parse(localStorage.getItem('customer'));
+          console.log("local:",this.customer.id);
+          axios.defaults.headers.common.Authorization ="Authorization: customer_id="+this.customer.id;
           console.log("Data:", resp.data.data);
         })
         .catch(function(error) {

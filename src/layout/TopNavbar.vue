@@ -11,7 +11,7 @@
             <b>{{ nameSLo }}</b>
           </li>
           <li class="nav-item">
-            <b-button to="/login" @click="logout">Đăng xuất</b-button>
+            <b-button @click="logout">Đăng xuất</b-button>
           </li>
         </ul>
       </div>
@@ -19,60 +19,50 @@
   </nav>
 </template>
 <script>
-import axios from 'axios'
-  export default {
-    computed: {
-      filtersearch:function(){
-
-      },
-      routeName () {
-        const {zet} = this.$route
-        return this.capitalizeFirstLetter(zet)
-      }
-    },
-    data () {
-      return {
-        search:'',
-        activeNotifications: false,
-        nameSLo:null,
-        auth:[]
-      }
-
-    },
-   created() {
-        let token = JSON.parse(window.localStorage.getItem('auth'))
-        this.nameSLo=token.name
-    },
-    methods: {
+import axios from "axios";
+export default {
+  computed: {
+    filtersearch: function() {},
+    routeName() {
+      const { zet } = this.$route;
+      return this.capitalizeFirstLetter(zet);
+    }
+  },
+  data() {
+    return {
+      search: "",
+      activeNotifications: false,
+      nameSLo: null
+    };
+  },
+  created() {
+    let token = JSON.parse(window.localStorage.getItem("auth"));
+    this.nameSLo = token.name;
+  },
+  methods: {
     logout() {
-      this.$store
-        this.auth = {};
-        this.saveCats();
-      },
-      saveCats() {
-                const parsed = JSON.stringify(this.auth);
-                localStorage.setItem("auth", parsed);
-              },
-      getUsername(){
-        axios.get("")
-      },
-      capitalizeFirstLetter (string) {
-        return string.charAt(0).toUpperCase() + string.slice(1)
-      },
-      toggleNotificationDropDown () {
-        this.activeNotifications = !this.activeNotifications
-      },
-      closeDropDown () {
-        this.activeNotifications = false
-      },
-      toggleSidebar () {
-        this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
-      },
-      hideSidebar () {
-        this.$sidebar.displaySidebar(false)
-      }
+      this.$store.dispatch("logout").then(() => this.$router.push("/login"));
+    },
+    getUsername() {
+      axios.get("");
+    },
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    toggleNotificationDropDown() {
+      this.activeNotifications = !this.activeNotifications;
+    },
+    closeDropDown() {
+      this.activeNotifications = false;
+    },
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    },
+    hideSidebar() {
+      this.$sidebar.displaySidebar(false);
     }
   }
+};
 </script>
 <style>
 .mr-sm-2 {
