@@ -20,16 +20,25 @@
           </slot>
         </thead>
         <tbody>
-          <tr v-for="(cat, n) in items" v-bind:key="n.product_id">
-            <td>{{ cat.name }}</td>
-            <td>{{ cat.price }}</td>
-            <td>{{ cat.img }}</td>
-            <td>{{ cat.size }}</td>
-            <td>{{ cat.color }}</td>
-            <td>{{ cat.quantity }}</td>
-            <td>{{ cat.total }}</td>
+          <tr v-for="cart in carts" v-bind:key="cart.product_name">
+            <td>{{ cart.product_name }}</td>
+            <td>{{ formatPrice(cart.product_price) }}Đ</td>
             <td>
-              <b-button variant="danger" size="sm">Remove</b-button>
+              <img
+                v-bind:src="'http://127.0.0.1:8000/uploads/product/'+cart.product_img"
+                width="100"
+                alt="product"
+              />
+            </td>
+            <td>{{ cart.size }}</td>
+            <td>{{ cart.color }}</td>
+            <td>
+              <b-input type="number" min="0" v-model="cart.quantity" ></b-input>
+              <b-button @click="update(cart.id)">update</b-button>
+                    </td>
+            <td>{{ formatPrice(cart.product_price * cart.quantity)}}Đ</td>
+            <td>
+              <b-button variant="danger" size="sm" @click="removeCart(cart.id)">Remove</b-button>
             </td>
           </tr>
         </tbody>
@@ -37,9 +46,7 @@
       <b-button class="paym" variant="primary" v-b-modal.modal-center
         >Payment</b-button
       >
-      <b-button class="paym" variant="primary" @click="clearAll()"
-        >Clear cart</b-button
-      >
+      <b-button class="paym" variant="primary">Clear cart</b-button>
       <b-link class="comeback" href="#" to="/home">
         <b-icon icon="arrow-return-left"></b-icon>
         Continue Purchase</b-link
@@ -158,84 +165,12 @@ export default {
   components: { ContentFooterHome, TopNavHome },
   data() {
     return {
-      cats: [],
-      // fields: [
-      //   {
-      //     key: "name",
-      //     label: "Product Name"
-      //   },
-      //   {
-      //     key: "price",
-      //     label: "Price"
-      //   },
-      //   {
-      //     key: "img",
-      //     label: "Image",
-      //     sortable: true
-      //   },
-      //   {
-      //     key: "size",
-      //     label: "Size",
-      //     sortable: true
-      //   },
-      //   {
-      //     key: "color",
-      //     label: "Color",
-      //     sortable: true
-      //   },
-      //   {
-      //     key: "quantity",
-      //     label: "Quantity",
-      //     sortable: true
-      //   },
-      //   {
-      //     key: "total",
-      //     label: "Total",
-      //     sortable: true
-      //   },
-      //   {
-      //     key: "actions",
-      //     label: "Actions"
-      //   }
-      // ],
-      items: [
-        {
-          name: "Huy",
-          price: "120 vnd",
-          img: "23",
-          size: "39",
-          color: "đen",
-          quantity: "2",
-          total: "240 vnd"
-        }
-      ],
-      // info: [
-      //   {
-      //     key: "name",
-      //     label: ""
-      //   },
-      //   {
-      //     key: "size",
-      //     label: ""
-      //   },
-      //   {
-      //     key: "color",
-      //     label: ""
-      //   },
-      //   {
-      //     key: "amount",
-      //     label: ""
-      //   },
-      //   {
-      //     key: "price",
-      //     label: ""
-      //   },
-      //   {
-      //     key: "actions",
-      //     label: ""
-      //   }
-      // ],
-      customer:[],
+      carts: [],
+      cart:{
+        quantity:null
+        },
+      customer: [],
+      id:null,
       bill: [
         {
           name: "Adidas",
@@ -255,7 +190,7 @@ export default {
     };
   },
   created() {
-    this.getDetail();
+    this.cartss();
   },
   mounted() {},
   computed: {
@@ -291,21 +226,73 @@ export default {
     }
   },
   methods: {
-    getDetail() {
-      this.customer=JSON.parse(localStorage.getItem('customer'));
-          console.log("local:",this.customer.id);
+        formatPrice(value) {
+      let val = (value / 1).toFixed(0).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
+    cartss() {
+      var self = this;
+      this.customer = JSON.parse(localStorage.getItem("customer"));
+      console.log("local:", this.customer.id);
       axios
-        .get("http://127.0.0.1:8000/api/view-cart")
+        .get("http://127.0.0.1:8000/api/view-cart/" + this.customer.id)
         .then(function(resp) {
-      this.customer=JSON.parse(localStorage.getItem('customer'));
-          console.log("local:",this.customer.id);
-          axios.defaults.headers.common.Authorization ="Authorization: customer_id="+this.customer.id;
-          console.log("Data:", resp.data.data);
+          self.carts = resp.data.data;
+          self.quantity=resp.data.data.quantity;
         })
         .catch(function(error) {
-          console.log("Loi:", error);
+          console.log("Loi cart:", error);
         });
-    }
+    },
+        removeCart(id) {
+      this.id = id;
+      Swal.fire({
+        title: "Bạn chắc chắn muốn xóa giỏ hàng này?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+      }).then(result => {
+        if (result.value) {
+          axios
+            .get(`http://127.0.0.1:8000/api/remove/` + id)
+            .then(() => {
+              Swal.fire(
+                "Đã xóa giỏ hàng!",
+                "Thành công.",
+                "success"
+              );
+              this.cartss();
+            })
+            .catch(error => {
+              this.cartss();
+              Swal.fire("Failed!", error.message, "warning");
+              console.log("Lỗi", error);
+            });
+        }
+      });
+    },
+            update(id) {
+      this.id = id;
+      var sl = this.cart.quantity;
+      console.log("sl:",sl);
+          axios
+            .put(`http://127.0.0.1:8000/api/update-cart/`+ id,{'quantity': sl},{ headers: {'Content-Type': 'application/json'}})
+            .then(() => {
+              Swal.fire(
+                "Đã update giỏ hàng!",
+                "Thành công.",
+                "success"
+              );
+              this.cartss();
+            })
+            .catch(error => {
+              this.cartss();
+              Swal.fire("Failed!", error.message, "warning");
+              console.log("Lỗi", error);
+            });
+    },
   }
 };
 </script>

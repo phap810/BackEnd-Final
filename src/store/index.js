@@ -23,16 +23,16 @@ const store = new Vuex.Store({
                     commit('auth_request')
                     axios({ url: 'http://127.0.0.1:8000/api/login', data: username, method: 'POST' })
                         .then(resp => {
-                            if (resp.data.code == 500) {
-                                alert(resp.data.message);
-                            } else {
+                            // if (resp.data.code == 500) {
+                            //     alert(resp.data.message);
+                            // } else {
                                 alert("Đăng nhập thành công")
                                 resp.data.data.map((resItem) => {
                                     console.log(resItem);
                                     localStorage.setItem('auth', JSON.stringify(resItem));
                                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + resItem.token
                                 })
-                            }
+                            //}
                             console.log(resp.data.data[0].token, "TOKEN");
                             commit('auth_success', resp.data.data[0].token, username)
                             resolve(resp)
@@ -56,7 +56,7 @@ const store = new Vuex.Store({
                                 alert("Đăng nhập thành công")
                                 resp.data.data.map((resItem) => {
                                     localStorage.setItem('customer', JSON.stringify(resItem));
-                                    axios.defaults.headers.common.Authorization ="Authorization: customer_id="+resItem.id;
+                                    // axios.defaults.headers.common.Authorization ="Authorization: customer_id="+resItem.id;
                                 })
                             }
                             resolve(resp)

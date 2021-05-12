@@ -288,7 +288,7 @@ export default {
     getColor() {
       console.log("id sp",this.product_id);
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-color/230")
+        .get("http://127.0.0.1:8000/api/product-color/227")
         .then(resp => {
           console.log("color",resp.data);
           this.listColor = resp.data;
@@ -299,7 +299,7 @@ export default {
     },
     getSize() {
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-size/230/140")
+        .get("http://127.0.0.1:8000/api/product-size/227/140")
         .then(resp => {
           console.log("size",resp.data);
           this.listSize = resp.data;

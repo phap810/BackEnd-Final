@@ -8,12 +8,16 @@
         <router-link class="item-menu" to="/shop">Shop</router-link>
         <router-link class="item-menu" to="/about">About</router-link>
         <router-link class="item-menu" to="/contact">Contact</router-link>
-        <router-link class="item-menu" to="/viewcart"
-          >Cart (<span class="total-count"></span>)
-          <b-icon icon="cart4" aria-hidden="true" class="iccart"></b-icon>
-        </router-link>
-        <div v-if="mail != null"> 
-          <b-button variant="primary" class="item-menu" @click="logout">Đăng xuất: {{ mail }}</b-button>
+
+        <div v-if="mail != null">
+          <router-link class="item-menu" to="/viewcart"
+            >Cart (<span class="total-count">{{ quantity_cart }}</span
+            >)
+            <b-icon icon="cart4" aria-hidden="true" class="iccart"></b-icon>
+          </router-link>
+          <b-button variant="primary" class="item-menu" @click="logout"
+            >Đăng xuất: {{ mail }}</b-button
+          >
         </div>
         <div v-else>
           <router-link class="item-menu" to="/logincustomer">Login</router-link>
@@ -29,21 +33,40 @@
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
 export default {
   data() {
     return {
-      mail: null
+      mail: null,
+      quantity_cart: null,
+      customer: []
     };
   },
   created() {
     let token = JSON.parse(window.localStorage.getItem("customer"));
     this.mail = token.email;
   },
+  async mounted() {
+    this.total();
+  },
   methods: {
     logout() {
-      this.$store
-        .dispatch("logoutcustomer")
-        .then(() => this.$router.go())
+      this.$store.dispatch("logoutcustomer").then(() => this.$router.push("/")).then(() => this.$router.go());
+    },
+    total() {
+      var self = this;
+      this.customer = JSON.parse(localStorage.getItem("customer"));
+      console.log("local:", this.customer.id);
+      axios
+        .get("http://127.0.0.1:8000/api/total-cart/" + this.customer.id)
+        .then(function(resp) {
+          self.quantity_cart = resp.data.data;
+        })
+        .catch(function(error) {
+          console.log("Loi cart:", error);
+        });
     }
   }
 };
