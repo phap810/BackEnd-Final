@@ -8,7 +8,7 @@ import Shop from 'src/pages/Shop.vue'
 import Contact from 'src/pages/Contact.vue'
 import About from 'src/pages/About.vue'
 import ViewCart from 'src/pages/ViewCart.vue'
-
+import Checkout from 'src/pages/Checkout.vue'
 //CUSTOMER
 import Register from 'src/pages/Register'
 import Logincustomer from 'src/pages/Logincustomer.vue'
@@ -80,6 +80,11 @@ const routes = [{
         path: '/viewcart',
         name: 'viewcart',
         component: ViewCart
+    },
+        {
+        path: '/checkout',
+        name: 'Checkout',
+        component: Checkout
     },
     {
         path: '/admin',

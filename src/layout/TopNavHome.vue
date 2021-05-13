@@ -15,8 +15,9 @@
             >)
             <b-icon icon="cart4" aria-hidden="true" class="iccart"></b-icon>
           </router-link>
+          <router-link class="item-menu" to="/checkout">{{ mail }}</router-link>
           <b-button variant="primary" class="item-menu" @click="logout"
-            >Đăng xuất: {{ mail }}</b-button
+            >Đăng xuất </b-button
           >
         </div>
         <div v-else>
@@ -53,7 +54,9 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("logoutcustomer").then(() => this.$router.push("/")).then(() => this.$router.go());
+      this.$store
+        .dispatch("logoutcustomer")
+        .then(() => this.$router.go());
     },
     total() {
       var self = this;

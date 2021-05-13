@@ -19,7 +19,7 @@
                       </b-badge>
                     </div>
                     <img class="img_shop"
-                      :src="'http://127.0.0.1:8000/uploads/product/' + product.img"
+                      :src="'http://127.0.0.1:8000/uploads/product/'+product.img"
                       contain  
                       height="50px"
                       width="337.78px"
@@ -221,6 +221,7 @@ export default {
   components: { CartModal },
   data() {
     return {
+      customer:[],
       product_id:null,
       size:null,
       color:null,
@@ -247,8 +248,10 @@ export default {
   },
   methods: {
         addItemToCart() {
+      this.customer = JSON.parse(localStorage.getItem("customer"));
       let formData = new FormData();
-      formData.append("id", this.product_id);
+      formData.append("customer_id", this.customer.id);
+      formData.append("product_id", this.product_id);
       formData.append("size_id", this.size);
       formData.append("color_id", this.color);
       formData.append("quantity", this.quantity);
@@ -256,7 +259,7 @@ export default {
         headers: { "Content-type": "multipart/form-data" }
       };
       axios
-        .post(`http://127.0.0.1:8000/api/add-cart`, formData, config)
+        .post(`http://127.0.0.1:8000/api/add-cart/`+this.customer.id, formData, config)
         .then(res => {
           Swal.fire("Đã thêm!", "Thêm sản phẩm vào giỏ hàng thành công.", "success");
         })
@@ -286,9 +289,9 @@ export default {
         });
     },
     getColor() {
-      console.log("id sp",this.product_id);
+      //console.log("id sp",this.product_id);
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-color/227")
+        .get("http://127.0.0.1:8000/api/product-color/230")
         .then(resp => {
           console.log("color",resp.data);
           this.listColor = resp.data;
@@ -299,7 +302,7 @@ export default {
     },
     getSize() {
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-size/227/140")
+        .get("http://127.0.0.1:8000/api/product-size/230/140")
         .then(resp => {
           console.log("size",resp.data);
           this.listSize = resp.data;
