@@ -12,6 +12,7 @@ import Checkout from 'src/pages/Checkout.vue'
 //CUSTOMER
 import Register from 'src/pages/Register'
 import Logincustomer from 'src/pages/Logincustomer.vue'
+import Profile from 'src/pages/ProfileCustomer'
 
 import Registration from 'src/client/Registration.vue'
 
@@ -57,6 +58,11 @@ const routes = [{
         component: Register
     },
     {
+        path: '/profile-customer',
+        name: 'profile',
+        component: Profile
+    },
+    {
         path: '/logincustomer',
         name: 'logincustomer',
         component: Logincustomer
@@ -81,7 +87,7 @@ const routes = [{
         name: 'viewcart',
         component: ViewCart
     },
-        {
+    {
         path: '/checkout',
         name: 'Checkout',
         component: Checkout

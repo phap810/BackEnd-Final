@@ -308,15 +308,13 @@ export default {
     show(id) {
       var self = this;
       this.formedit.id = id;
-      console.log("http://127.0.0.1:8000/api/billDetail/", id);
-      axios.get("http://127.0.0.1:8000/api/billDetail/" + id).then(res => {
-        self.name = res.data.Customer.name;
-        self.email = res.data.Customer.email;
-        self.phone = res.data.Customer.phone;
-        self.address = res.data.Customer.address;
-        self.billDetail = res.data.BillDetail;
+      axios.get("http://127.0.0.1:8000/api/bill/"+id).then(res => {
+        self.name = res.data.customer.name;
+        self.email = res.data.customer.email;
+        self.phone = res.data.customer.phone;
+        self.address = res.data.customer.address;
+        self.billDetail = res.data.billdetail;
 
-        console.log("data", res.data.BillDetail);
       });
     },
     getItem() {

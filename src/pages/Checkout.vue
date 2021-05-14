@@ -13,8 +13,9 @@
               <label for="email" class="">Email</label>
               <input
                 type="text"
-                value="123"
+                disabled
                 id="email"
+                v-model="email"
                 class="form-control mb-4"
               />
               <div class="row">
@@ -24,14 +25,23 @@
                 <div class="col-md-6 mb-4">
                   <!--firstName-->
                   <label for="firstName" class="">Name</label>
-                  <input type="text" id="firstName" v-model="checkout.name" class="form-control" />
+                  <input
+                    type="text"
+                    id="firstName"
+                    v-model="checkout.name"
+                    class="form-control"
+                  />
                 </div>
                 <!--Grid column-->
                 <!--Grid column-->
                 <div class="col-md-6 mb-2">
                   <!--lastName-->
                   <label for="lastName" class="">Phone</label>
-                  <input type="tel" v-model="checkout.phone" class="form-control" />
+                  <input
+                    type="tel"
+                    v-model="checkout.phone"
+                    class="form-control"
+                  />
                 </div>
                 <!--Grid column-->
               </div>
@@ -47,7 +57,12 @@
               />
 
               <label for="address" class="">Note</label>
-              <textarea class="form-control mb-4" v-model="checkout.note" rows="4" cols="50">
+              <textarea
+                class="form-control mb-4"
+                v-model="checkout.note"
+                rows="4"
+                cols="50"
+              >
               </textarea>
               <label for="address" class="">Mothod</label>
               <b-form-select
@@ -58,7 +73,7 @@
               <!-- <mdb-btn @click="payment()" color="primary" size="lg" block type="submit"
                 >Payment</mdb-btn
               > -->
-              <b-button variant="primary" @click="payment()" >Payment</b-button>
+              <b-button variant="primary" @click="payment()">Payment</b-button>
             </form>
           </mdb-tab-content>
         </mdb-col>
@@ -74,10 +89,15 @@
                 v-for="cart in carts"
                 v-bind:key="cart.product_name"
               >
-                <dd class="col-sm-8">
+                <dd class="col-sm-6">
                   {{ cart.product_name }}
+                  màu {{ cart.color }}
+                  size {{ cart.size }}
                 </dd>
-                <dd class="col-sm-4">{{ formatPrice(cart.product_price) }}Đ</dd>
+                <dd class="col-sm-4">
+                  {{ cart.quantity }} x {{ formatPrice(cart.product_price) }}Đ
+                </dd>
+                <dd class="col-sm-2">{{ formatPrice(cart.quantity * cart.product_price) }}Đ</dd>
               </dl>
               <hr />
               <dl class="row">
@@ -157,19 +177,28 @@ export default {
         { value: 1, text: "Giao tận nơi (COD)" },
         { value: 2, text: "Thanh toán online" }
       ],
-      customer:[],
+      email:null,
+      carts: [],
+      customer: [],
       checkout: {
-        name:null,
-        phone:null,
-        address:null,
-        note:null,
-        method:null,
+        name: null,
+        phone: null,
+        address: null,
+        note: null,
+        method: null
       }
     };
   },
-  methods:{
-        payment() {
-          this.customer = JSON.parse(localStorage.getItem("customer"));
+  created() {
+    this.cartss();
+  },
+  methods: {
+    formatPrice(value) {
+      let val = (value / 1).toFixed(0).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
+    payment() {
+      this.customer = JSON.parse(localStorage.getItem("customer"));
       let formData = new FormData();
       formData.append("name", this.checkout.name);
       formData.append("phone", this.checkout.phone);
@@ -177,7 +206,7 @@ export default {
       formData.append("note", this.checkout.note);
       formData.append("payment", this.checkout.method);
       axios
-        .post(`http://127.0.0.1:8000/api/bill/`+this.customer.id, formData)
+        .post(`http://127.0.0.1:8000/api/bill/` + this.customer.id, formData)
         .then(res => {
           Swal.fire("Đã thanh toán!", "Thanh toán thành công.", "success");
         })
@@ -185,8 +214,20 @@ export default {
           Swal.fire("Failed!", error, "warning");
         });
     },
+    cartss() {
+      var self = this;
+      this.customer = JSON.parse(localStorage.getItem("customer"));
+      axios
+        .get("http://127.0.0.1:8000/api/view-cart/" + this.customer.id)
+        .then(function(resp) {
+          self.carts = resp.data.data;
+          self.email = self.customer.email; 
+        })
+        .catch(function(error) {
+          console.log("Loi cart:", error);
+        });
+    }
   }
-
 };
 </script>
 
