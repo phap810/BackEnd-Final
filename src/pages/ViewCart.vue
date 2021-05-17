@@ -36,7 +36,7 @@
             <td>{{ cart.color }}</td>
             <td>
               <b-input type="number" min="0" v-model="cart.quantity"></b-input>
-              <b-button @click="update(cart.id)">update</b-button>
+              <!-- <b-button @click="update(cart.id)">update</b-button> -->
             </td>
             <td>{{ formatPrice(cart.product_price * cart.quantity) }}Đ</td>
             <td>

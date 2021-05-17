@@ -146,7 +146,7 @@
                   <div v-else>
                     <div class="importpr">{{ formatPrice(im_price) }}.Đ</div>
                   </div>
-                  <b-input v-model="product_id"></b-input>
+                  <b-input disabled v-model="product_id"></b-input>
                   <div class="choose">
                     <b-form-group label="Chọn màu">
                     <b-form-select class="color" v-model="color">
@@ -291,7 +291,7 @@ export default {
     getColor() {
       //console.log("id sp",this.product_id);
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-color/230")
+        .get("http://127.0.0.1:8000/api/product-color/236")
         .then(resp => {
           console.log("color",resp.data);
           this.listColor = resp.data;
@@ -302,7 +302,7 @@ export default {
     },
     getSize() {
       Vue.axios
-        .get("http://127.0.0.1:8000/api/product-size/230/140")
+        .get("http://127.0.0.1:8000/api/product-size/236/139")
         .then(resp => {
           console.log("size",resp.data);
           this.listSize = resp.data;
